@@ -1,1 +1,1 @@
-# PrimeServer
+# prime-server
