@@ -8,6 +8,7 @@ import java.text.NumberFormat;
 import java.util.LinkedHashSet;
 import java.util.Vector;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
@@ -15,16 +16,16 @@ import java.util.stream.Collectors;
 @SuppressWarnings("ALL")
 @WebService(targetNamespace = "default")
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-public class Worker extends Thread {
+public class Worker implements Callable<Vector<Integer>> {
     private Vector<Integer> primes = new Vector<Integer>();
     private int n = -1;
     Worker() {
-        super("my extending thread");
+        //super("my extending thread");
     }
     Worker(int n) {
-        super("my extending thread");
+        //super("my extending thread");
         this.n = n;
-        start();
+        //start();
     }
     public void run() {
         try {
@@ -76,11 +77,33 @@ public class Worker extends Thread {
     @WebMethod(operationName = "setN")
     public void setN(@WebParam(name = "n") int n){
         this.n = n;
-        start();
+        //start();
     }
 
-    @WebMethod(operationName = "stop")
+    /*@WebMethod(operationName = "stop")
     public void stopT(){
         this.stop();
+    }*/
+
+    @Override
+    public Vector<Integer> call() throws Exception {
+        try{
+        System.out.println("start " + n);
+        PrimeFarm farm = new PrimeFarm();
+        long start = System.currentTimeMillis();
+        NumberFormat formatter = new DecimalFormat("#0.00000");
+        primes = farm.getPrimes(n);
+        long end = System.currentTimeMillis();
+        System.out.print(n + "th prime: ");
+        int last = -1;
+        for (Iterator iter = this.primes.iterator(); iter.hasNext(); )
+            last = (int) iter.next();
+        System.out.println(last);
+        System.out.println("Execution time is " + formatter.format((end - start) / 1000d) + " seconds");
+        System.out.println("Thread vec " + this.n + " : " + primes.size());
+    } catch (Exception e) {
+        System.out.println("my thread interrupted " + n);
+    }
+    return primes;
     }
 }

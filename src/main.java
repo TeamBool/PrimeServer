@@ -9,7 +9,7 @@ import javax.xml.ws.handler.Handler;
 
 public class main {
     public static void main(String[] args){
-        Endpoint endpoint = Endpoint.create(new Worker());
+        Endpoint endpoint = Endpoint.create(new Prepare());
         //Endpoint endpoint = Endpoint.publish( "http://localhost:8080/worker", new StockPrice() );
         List<Handler> handlerChain = endpoint.getBinding().getHandlerChain();
         handlerChain.add(new SOAPLoggingHandler());

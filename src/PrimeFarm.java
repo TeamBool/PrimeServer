@@ -98,6 +98,11 @@ public class PrimeFarm {
                 this.lastN++;
             }
         //}
+        for(int x : this.primes){
+                System.out.println(x);
+        }
+
+
         return primes;
     }
 }

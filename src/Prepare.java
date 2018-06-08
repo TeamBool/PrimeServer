@@ -18,7 +18,12 @@ public class Prepare {
     public @WebResult(name = "PrimeVector")
     Vector<Integer> newWorker(@WebParam(name = "nPrimes") int n){
         //Worker worker = new Worker(n);
-        Vector<Integer> vec = new Worker(n).getPrimesVec();
+        Vector<Integer> vec = null;
+        try {
+            vec = new Worker(n).call();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return vec;
     }
     @WebMethod(operationName = "primesString")
@@ -28,6 +33,8 @@ public class Prepare {
             buff.append(x);
             buff.append(", ");
         }
+        buff.deleteCharAt(buff.length()-1);
+        buff.deleteCharAt(buff.length()-1);
         //buff.delete(buff.length()-1, buff.length()-3);
         return buff.toString();
     }
