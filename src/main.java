@@ -10,13 +10,12 @@ import javax.xml.ws.handler.Handler;
 public class main {
     public static void main(String[] args){
         Endpoint endpoint = Endpoint.create(new Prepare());
-        //Endpoint endpoint = Endpoint.publish( "http://localhost:8080/worker", new StockPrice() );
         List<Handler> handlerChain = endpoint.getBinding().getHandlerChain();
         handlerChain.add(new SOAPLoggingHandler());
         endpoint.getBinding().setHandlerChain(handlerChain);
         endpoint.publish("http://localhost:8080/services");
-        //JOptionPane.showMessageDialog( null, "Server beenden" );
-        //endpoint.stop();
+        JOptionPane.showMessageDialog( null, "Server beenden" );
+        endpoint.stop();
     }
 
 }

@@ -35,7 +35,6 @@ public class Prepare {
         }
         buff.deleteCharAt(buff.length()-1);
         buff.deleteCharAt(buff.length()-1);
-        //buff.delete(buff.length()-1, buff.length()-3);
         return buff.toString();
     }
     @WebMethod(operationName = "primesArray")
@@ -45,7 +44,6 @@ public class Prepare {
         Vector<Integer> vec = newWorker(n);
         for(int i = 0; i < vec.size(); i++){
             array[i] = vec.elementAt(i);
-            System.out.println(vec.elementAt(i) + " " + array[i]);
         }
         return array;
     }
