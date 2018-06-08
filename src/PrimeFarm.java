@@ -7,27 +7,27 @@ import static java.lang.Math.sqrt;
 public class PrimeFarm {
     private int lastN = 0;
     //private LinkedHashSet<Integer> hashMap;
-    private Set hashMap;
-    private Vector<Integer> primes;
+    //private Set hashMap;
+    private Vector<Integer> primes = new Vector<Integer>();
 
     //public PrimeFarm(LinkedHashSet<Integer> hashMap, Vector<Integer> primes) {
     public PrimeFarm(Set hashMap, Vector<Integer> primes) {
-      synchronized (hashMap) {
+      /*synchronized (hashMap) {
           this.hashMap = hashMap;
-      }
+      }*/
         this.primes = primes;
-        findN();
+        //findN();
     }
 
     public PrimeFarm(){
 
     }
 
-    private void findN() {
+    /*private void findN() {
         synchronized (this.hashMap) {
             this.lastN = hashMap.size();
         }
-    }
+    }*/
 
     private int nextPrime(int digit) {
         do {
@@ -74,8 +74,7 @@ public class PrimeFarm {
     }
 
     public Vector<Integer> getPrimes(int n) {
-        synchronized (this.hashMap) {
-            Iterator iter = this.hashMap.iterator();
+            //Iterator iter = this.hashMap.iterator();
             int last = 1;
             int ncopy = n;
             if (this.primes.size() == n)
@@ -83,22 +82,22 @@ public class PrimeFarm {
             if (this.primes.size() > n) {
                 this.primes.clear();
             }
-            while (iter.hasNext() && ncopy > 0) {
+            /*while (iter.hasNext() && ncopy > 0) {
                 this.primes.add((int) iter.next());
                 last = this.primes.lastElement();
                 ncopy--;
-            }
+            }*/
             if (ncopy == 0)
                 return primes;
             n -= lastN;
             while (n > 0) {
                 last = nextPrime(last);
                 this.primes.add(last);
-                hashMap.add(last);
+                //hashMap.add(last);
                 n--;
                 this.lastN++;
             }
-        }
+        //}
         return primes;
     }
 }

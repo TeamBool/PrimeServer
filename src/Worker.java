@@ -1,3 +1,8 @@
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebResult;
+import javax.jws.WebService;
+import javax.jws.soap.SOAPBinding;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedHashSet;
@@ -7,37 +12,24 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
-class Worker extends Thread {
+@SuppressWarnings("ALL")
+@WebService(targetNamespace = "default")
+@SOAPBinding(style = SOAPBinding.Style.RPC)
+public class Worker extends Thread {
     private Vector<Integer> primes = new Vector<Integer>();
-    private int n;
-    private Set hashes;
-
-    //Worker(LinkedHashSet<Integer> hashmap, Vector<Integer> primes, int n)
-    Worker(Set hashmap, int n) {
+    private int n = -1;
+    Worker() {
         super("my extending thread");
-        main.free = false;
-        //TODO THREADSAFE!!!!!!
-        //this.hashmap = (LinkedHashSet<Integer>)hashmap.clone();
-        //this.primes = (Vector<Integer>) primes.clone();
-        /*synchronized (hashmap){
-            for(Iterator iter = hashmap.iterator(); iter.hasNext();){
-                int entry = (int) iter.next();
-                this.shashmap.add(entry);
-            }
-            this.org = hashmap;
-        }*/
-        this.hashes = hashmap;
-
+    }
+    Worker(int n) {
+        super("my extending thread");
         this.n = n;
         start();
     }
-
     public void run() {
         try {
             System.out.println("start " + n);
-            //synchronized (hashmap) {
-            //PrimeFarm farm = new PrimeFarm(this.shashmap, this.primes);
-            PrimeFarm farm = new PrimeFarm(this.hashes, this.primes);
+            PrimeFarm farm = new PrimeFarm();
             long start = System.currentTimeMillis();
             NumberFormat formatter = new DecimalFormat("#0.00000");
             primes = farm.getPrimes(n);
@@ -49,22 +41,46 @@ class Worker extends Thread {
             System.out.println(last);
             System.out.println("Execution time is " + formatter.format((end - start) / 1000d) + " seconds");
             System.out.println("Thread vec " + this.n + " : " + primes.size());
-            System.out.println("Thread set " + this.n + " : " + this.hashes.size());
-            //}
         } catch (Exception e) {
             System.out.println("my thread interrupted " + n);
         }
-        /*synchronized (main.primes){
-            if(main.primes.size() >= this.primes.size()){
-                return;
-            }
-            for(int i = main.primes.size(); i < this.primes.size(); i++){
-                main.primes.add(this.primes.elementAt(i));
-            }
-        }*/
     }
 
-    public Vector<Integer> getPrimes() {
+    @WebMethod(operationName = "getPrimesVec")
+    public @WebResult(name = "PrimeVector")Vector<Integer> getPrimesVec() {
         return this.primes;
+    }
+
+    @WebMethod(operationName = "getPrimesString")
+    public @WebResult(name = "primesString") String getPrimesString() {
+        StringBuffer buff = new StringBuffer();
+        for(int x : this.primes){
+            buff.append(x);
+            buff.append(", ");
+        }
+        //buff.delete(buff.length()-1, buff.length()-3);
+        System.out.println("Buffer: " + buff.toString());
+        return buff.toString();
+    }
+
+    @WebMethod(operationName = "getPrimesArray")
+    public @WebResult(name = "primesArray") int[] getPrimesArray(){
+        int array[] = new int[n];
+        for(int i = 0; i < this.primes.size(); i++){
+            array[i] = this.primes.elementAt(i);
+            System.out.println(this.primes.elementAt(i) + " " + array[i]);
+        }
+        return array;
+    }
+
+    @WebMethod(operationName = "setN")
+    public void setN(@WebParam(name = "n") int n){
+        this.n = n;
+        start();
+    }
+
+    @WebMethod(operationName = "stop")
+    public void stopT(){
+        this.stop();
     }
 }
