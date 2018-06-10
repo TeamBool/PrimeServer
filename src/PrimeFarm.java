@@ -1,33 +1,20 @@
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import static java.lang.Math.sqrt;
 
 public class PrimeFarm {
     private int lastN = 0;
-    //private LinkedHashSet<Integer> hashMap;
-    //private Set hashMap;
     private Vector<Integer> primes = new Vector<Integer>();
-
-    //public PrimeFarm(LinkedHashSet<Integer> hashMap, Vector<Integer> primes) {
-    public PrimeFarm(Set hashMap, Vector<Integer> primes) {
-      /*synchronized (hashMap) {
-          this.hashMap = hashMap;
-      }*/
-        this.primes = primes;
-        //findN();
-    }
+    private Set set = Prepare.conSet;
 
     public PrimeFarm(){
-
+        findN();
     }
 
-    /*private void findN() {
-        synchronized (this.hashMap) {
-            this.lastN = hashMap.size();
+    private void findN() {
+        synchronized (this.set) {
+            this.lastN = set.size();
         }
-    }*/
+    }
 
     private int nextPrime(int digit) {
         do {
@@ -74,7 +61,8 @@ public class PrimeFarm {
     }
 
     public Vector<Integer> getPrimes(int n) {
-            //Iterator iter = this.hashMap.iterator();
+        synchronized (this.set) {
+            Iterator iter = this.set.iterator();
             int last = 1;
             int ncopy = n;
             if (this.primes.size() == n)
@@ -82,27 +70,27 @@ public class PrimeFarm {
             if (this.primes.size() > n) {
                 this.primes.clear();
             }
-            /*while (iter.hasNext() && ncopy > 0) {
+            while (iter.hasNext() && ncopy > 0) {
                 this.primes.add((int) iter.next());
                 last = this.primes.lastElement();
                 ncopy--;
-            }*/
+            }
             if (ncopy == 0)
                 return primes;
             n -= lastN;
             while (n > 0) {
                 last = nextPrime(last);
                 this.primes.add(last);
-                //hashMap.add(last);
+                set.add(last);
                 n--;
                 this.lastN++;
             }
-        //}
-        for(int x : this.primes){
+            /*for (int x : this.primes) {
                 System.out.println(x);
+            }
+            //ONLY FOR TEST PURPOSE -> safe time
+            */
         }
-
-
         return primes;
     }
 }
