@@ -24,7 +24,7 @@ public class main {
         } else {
             if (args[0].equalsIgnoreCase("h")) {
                 System.out.println("Usage");
-                System.out.println("java -jar prime-server.jar http://host:123.123.123.123:8080/dir");
+                System.out.println("java -jar prime-server.jar http://123.123.123.123:8080/dir");
                 return;
             } else {
                 try {
