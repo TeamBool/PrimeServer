@@ -11,9 +11,9 @@ public class PrimeFarm {
     }
 
     private void findN() {
-        synchronized (this.set) {
+        //synchronized (this.set) {
             this.lastN = set.size();
-        }
+        //}
     }
 
     private int nextPrime(int digit) {
@@ -61,7 +61,7 @@ public class PrimeFarm {
     }
 
     public Vector<Integer> getPrimes(int n) {
-        synchronized (this.set) {
+        //synchronized (this.set) {
             Iterator iter = this.set.iterator();
             int last = 1;
             int ncopy = n;
@@ -90,7 +90,7 @@ public class PrimeFarm {
             }
             //ONLY FOR TEST PURPOSE -> safe time
             */
-        }
+       // }
         return primes;
     }
 }

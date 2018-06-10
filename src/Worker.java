@@ -25,7 +25,7 @@ public class Worker implements Callable<Vector<Integer>> {
 
     public void run() {
         try {
-            synchronized (Prepare.conSet) {
+            //synchronized (Prepare.conSet) {
                 System.out.println("start " + n);
                 PrimeFarm farm = new PrimeFarm();
                 NumberFormat formatter = new DecimalFormat("#0.00000");
@@ -41,7 +41,7 @@ public class Worker implements Callable<Vector<Integer>> {
                 //ONLY FOR TEST PURPOSE! -> safe time
                 */
                 System.out.println("Execution time is " + formatter.format((end - start) / 1000d) + " seconds");
-            }
+            //}
         } catch (Exception e) {
             System.out.println("my thread interrupted " + n);
         }
